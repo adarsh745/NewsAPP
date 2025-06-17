@@ -1,132 +1,31 @@
-// import React, { Component } from 'react'
-// import Newsitems from './Newsitems'
-// import button from '../components/button'
-
-// export class News extends Component {
-//   constructor()
-//   {
-//     super();
-//     console.log("Hello I am cosructer");
-//     this.state=
-//     {
-//        articles :[],
-//        loading : false,
-//        cnt:0
-//     }
-//   }
-
- 
-  
-
-//    async componentDidMount()
-//   {
-
-//     let ApiUrl= "https://newsapi.org/v2/top-headlines?country=us&apiKey=b8a93492d3eb43f188e2e6b1e811da14";
-
-
-
-//     let data =  await fetch(ApiUrl);
-
-//     let parcedData= await data.json()
-
-
-//     this.setState({articles: parcedData.articles})
-
-//     console.log(parcedData)
-
-
-
-//   }
-
-//    next=async()=>
-//   {
-//     this.setState({cnt:this.state.cnt+1})
-//     let ApiUrl= `https://newsapi.org/v2/top-headlines?country=us&apiKey=b8a93492d3eb43f188e2e6b1e811da14&page=${cnt}`;
-
-
-
-//     let data =  await fetch(ApiUrl);
-
-//     let parcedData= await data.json()
-
-
-//     this.setState({articles: parcedData.articles})
-
-
-//   }
-
-//   prev=async()=>
-//   {
-//     let ApiUrl= "https://newsapi.org/v2/top-headlines?country=us&apiKey=b8a93492d3eb43f188e2e6b1e811da14";
-
-
-
-//     let data =  await fetch(ApiUrl);
-
-//     let parcedData= await data.json()
-
-
-//     this.setState({articles: parcedData.articles})
-
-
-//   }
-
-
-    
-//   render() {
-//     return (
-//       <div className='container my-3'>
-//         <h2>News App - Top Headlines </h2>
-//         <div className="row">
-//              {this.state.articles.map((item)=>{
-//                  return <div className='col-md-3'  key={item.url}>
-//                     <Newsitems title={item.title.slice(0,45)} discription={item.description.slice(0,80)} imgUrl={item.urlToImage} newsUrl={item.url}></Newsitems>
-                    
-//                 </div>
-                
-
-//             })}
-//             <div style={{display:'flex',flexDirection:'row',gap:1200}}>
-
-//             <button type="button" class="btn btn-primary" style={{width:70,height:50}} onClick={this.next}>Prev</button>
-//             <button type="button" class="btn btn-primary" style={{width:70,height:50}} onClick={this.prev}>Next</button>
-
-//             </div>
-  
-               
-               
-                
-//         </div>
-        
-//       </div>
-//     )
-//   }
-// }
-
-// export default Ne
-
-
-
 import React, { useEffect, useState } from 'react';
 import Newsitems from './Newsitems';
+import Loading from './Loading';
+import { store } from '../App';
+import { useContext } from 'react';
+import LoadingBar from 'react-top-loading-bar';
 
-export default function News() {
+export default function News(props) {
   const [data, setData] = useState([]);
   const [next, setNext] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const[pages,setPages]=useState(0)
 
+  const [mode, setMode]=useContext(store)
+
   useEffect(() => {
     setLoading(true); 
     setError("");
 
-    fetch(`https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=a82467e200d84ab2adcb1dba35ef0d73&page=${next}&pageSize=15`)
+    fetch(`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=a82467e200d84ab2adcb1dba35ef0d73&page=${next}&pageSize=15`)
       .then((response) => response.json())
       .then((resData) => {
-        if (Array.isArray(resData.articles)) {
+        if (Array.isArray(resData.articles)) 
+          {
           setData(resData.articles);
           setPages(Math.ceil(resData.totalResults / 15));
+          console.log("the total ordrs is :",resData.totalResults)
         } else {
           setData([]);
           setError("No articles found.");
@@ -139,22 +38,38 @@ export default function News() {
         setLoading(false);
       });
   }, [next]);
+  if(loading)
+  {
+    return <Loading></Loading>
+  }
+  
+
+  console.log(props.category)
+    console.log(props.country)
+    console.log("mode of navbar is :", mode)
+    const  catgory=props.category;
+    const uppercase=catgory.toUpperCase();
 
   return (
-    <div className='container my-4'>
-      <h2>News Top Headlines</h2>
+    <div className='container my-4 bg-blue'>
+      <h1 className={`text-${mode === 'light' ? 'black' : 'white'}`} style={{marginTop:'90px'}} >Top News Headlines  </h1>
+     <br></br>
 
       {loading && <p>Loading...</p>}
       {error && <p className="text-danger">{error}</p>}
 
       <div className='row'>
-        {data.map((item, index) => (
+        {!loading && data.map((item, index) => (
           <div className='col-md-4' key={item.url || index}>
             <Newsitems
-              imgUrl={item.urlToImage}
-              title={item.title}
-              description={item.description}
-              newsUrl={item.url}
+               imgUrl={item.urlToImage}
+               title={item.title.slice(0,20)}
+               discription={!item.description ? "No description available" : item.description.slice(0,80)}
+               newsUrl={item.url}
+               author={item.author || "Unknown"}
+               date={new Date(item.publishedAt).toISOString().split('T')[0]}
+               source={item.source.name}
+               pages={pages}
             />
           </div>
         ))}
@@ -182,3 +97,5 @@ export default function News() {
     </div>
   );
 }
+
+
