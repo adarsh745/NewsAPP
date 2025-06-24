@@ -1,16 +1,41 @@
-import React, { useState } from 'react';
-import acount from './acount.png'
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom'; // Correct import
+import account from './acount.png'; // Check image path
 
 const Account = () => {
+  const navigate = useNavigate();
+  const dropdownRef = useRef(null); // Reference for the dropdown menu
+  const profileIconRef = useRef(null); // Reference for the profile icon
   const [isOpen, setIsOpen] = useState(false);
 
+  const onNavigate = () => {
+    navigate('/login'); // Correct path to login
+  };
+
   const toggleDropdown = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current && 
+        !dropdownRef.current.contains(event.target) &&
+        !profileIconRef.current.contains(event.target)
+      ) {
+        setIsOpen(false); // Close the dropdown
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside); // Cleanup listener
+    };
+  }, []);
 
   const profileContainerStyle = {
     position: 'relative',
     display: 'inline-block',
-    marginRight:'20'
-
+    marginRight: '20px',
   };
 
   const profileIconStyle = {
@@ -40,25 +65,26 @@ const Account = () => {
     cursor: 'pointer',
   };
 
-  const dropdownItemHoverStyle = {
-    backgroundColor: '#f1f1f1',
-  };
-
   return (
-    <div style={{profileContainerStyle,marginRight:28}} >
-      <div style={profileIconStyle} onClick={toggleDropdown}>
+    <div style={profileContainerStyle}>
+      {/* Added ref to profile icon */}
+      <div 
+        ref={profileIconRef} 
+        style={profileIconStyle} 
+        onClick={toggleDropdown}
+      >
         <img
-          src={acount} 
+          src={account}
           alt="Profile"
           style={profileImgStyle}
         />
       </div>
       {isOpen && (
-        <div style={dropdownMenuStyle}>
+        <div ref={dropdownRef} style={dropdownMenuStyle}>
           <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
             <li style={dropdownItemStyle}>View Profile</li>
             <li style={dropdownItemStyle}>Settings</li>
-            <li style={dropdownItemStyle}>Logout</li>
+            <li style={dropdownItemStyle} onClick={onNavigate}>Logout</li>
           </ul>
         </div>
       )}
@@ -67,4 +93,3 @@ const Account = () => {
 };
 
 export default Account;
- 

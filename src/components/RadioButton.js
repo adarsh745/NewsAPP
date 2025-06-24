@@ -7,24 +7,26 @@ export default function RadioButton() {
 
     const [data,setData]=useContext(store)
     const[ mode, setMode]=useState('light');
-  console.log("...................")
-            function changeColorMode()
-            {
-              if(mode==="light")
+    console.log("...................")
+    
+
+              function changeColorMode()
               {
-                setMode('dark');
-                document.body.style.backgroundColor='black'
-                console.log("dark mode is on")
-                setData('dark')
+                if(mode==="light")
+                {
+                  setMode('dark');
+                  document.body.style.backgroundColor='black'
+                  console.log("dark mode is on")
+                  setData('dark')
+                }
+                else
+                {
+                  setMode('light')
+                  document.body.style.backgroundColor='white'
+                  console.log("light mode is on")
+                  setData('light')
+                }
               }
-              else
-              {
-                setMode('light')
-                document.body.style.backgroundColor='white'
-                console.log("light mode is on")
-                setData('light')
-              }
-            }
     
   return (
     <div >

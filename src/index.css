@@ -1,0 +1,116 @@
+/* LoginPage.css */
+
+/* Container with Gradient Background */
+.login-container {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #7b2ff7, #d13ff0, #f38b4a);
+}
+
+/* Left side (Image) */
+.left-side {
+  position: relative;
+  width: 90%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-side img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+}
+
+.left-side h1 {
+  position: absolute;
+  top: -25%;
+  left: 10%;
+  font-size: 3rem;
+  color: white;
+  font-weight: bold;
+  animation: fadeIn 1s ease-in;
+}
+
+/* Right side (Form) */
+.right-side {
+  width: 50%;
+  height: 100%;
+  background-color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-side h1 {
+  font-size: 3rem;
+  color: #060606;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+/* Form Elements */
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 1rem;
+  margin-top: 1rem;
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #5a5a5a;
+}
+
+/* Submit Button */
+button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(90deg, #6366f1, #9333ea, #f43f5e);
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background-color: #9e5fe1;
+}
+
+/* Forgot Password Link */
+.forgot-password {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.forgot-password a {
+  color: #6366f1;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
