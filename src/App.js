@@ -13,7 +13,6 @@ const AppRouter = () => {
   return (
     <>
       {location.pathname !== '/login' && <Navbar />}
-
       <Routes>
         <Route path='/login' Component={Login}></Route>
         <Route path='/' element={<News key="general" country="us" category="general" />} />

@@ -10,7 +10,8 @@ const Account = () => {
 
   const onNavigate = () => {
     navigate('/login'); // Correct path to login
-  };
+  };packagpublic/logo.jpg
+  
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
